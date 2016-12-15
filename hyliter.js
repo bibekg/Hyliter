@@ -29,7 +29,12 @@ function formatDateTime(d) {
 }
 
 function getHylites() {
-  return JSON.parse(localStorage.hylites);
+  const h = localStorage.hylites;
+  if (h) {
+    return JSON.parse(h);
+  } else {
+    return undefined;
+  }
 }
 
 function saveHylites(h) {
@@ -41,37 +46,54 @@ function populateHylites() {
   $("#hylites").html("");
 
   const hylites = getHylites();
-  for (let i = 0; i < hylites.length; i++) {
-    const date = formatDateTime(hylites[i].date);
 
-    const html = `<div class="hylite" id="hylite-${i}">
-                    <div class="quote">
-                      <p>${hylites[i].quote}</p>
-                    </div>
-                    <div class="date">
-                      <p>${date.date}</p>
-                      <p>${date.time}</p>
-                    </div>
-                    <div class="delete">
-                      <i class="material-icons">close</i>
-                    </div>
-                  </div>`;
+  let html;
+  if (!hylites || hylites.length === 0) {
+    html = `<h1 id="title">
+              You don't have any Hylites saved.<br>
+              Select text, right-click, and Hylite.
+            </h1>`;
+  } else if (hylites) {
 
-    $("#hylites").append(html);
+    html = `<h1 id="title">Your Hylites</h1>`;
+
+    for (let i = 0; i < hylites.length; i++) {
+      const h = hylites[i];
+      const date = formatDateTime(h.date);
+
+      html += `<div class="hylite" id="hylite-${i}">
+                      <div class="context container">
+                        <a title=" ${h.source_title}" href="${h.source_url}">
+                          <img src="${h.source_icon_url}">
+                        </a>
+                      </div>
+                      <div class="date container">
+                        <p>${date.date}<br>${date.time}</p>
+                      </div>
+                      <div class="quote container">
+                        <p>${h.selection}</p>
+                      </div>
+                      <div class="delete container">
+                        <i class="material-icons">close</i>
+                      </div>
+                    </div>`;
+    }
   }
 
-  bindDeleter();
+  $("#hylites").append(html);
+  bindDeleteHandler();
 }
 
-function bindDeleter() {
-  $(".delete").click(function() {
-    const parent = $(this).parents()[0];
-    const id = parent.id;
-    const num = id.substr(7);
+function bindDeleteHandler() {
+  $(".delete i").click(function() {
 
+    // Get corresponding hylite index and remove
+    // it from local storage
+    const num = $(this).parents()[0].id.substr(7);
     let hylites = getHylites();
     hylites.splice(num, 1);
     saveHylites(hylites);
+
     populateHylites();
   });
 }

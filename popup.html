@@ -24,6 +24,18 @@
       color: white;
     }
 
+    .container {
+      display: -webkit-flexbox;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      justify-content: center;
+    }
+
     #title {
       margin-top: 15px;
       margin-left: 15px;
@@ -54,14 +66,18 @@
       padding: 5px;
     }
 
+    .hylite .context {
+      width: 5%;
+    }
+
     .hylite .quote {
-      width: 75%;
+      width: 70%;
     }
 
     .hylite .date {
       width: 20%;
       text-align: center;
-      line-height: 10px;
+      line-height: 16px;
     }
 
     .hylite .helper {
@@ -79,6 +95,11 @@
       vertical-align: middle;
       text-align: center;
       line-height: 50px;
+      cursor: default;
+    }
+
+    .hylite .delete i:hover {
+      color: white;
     }
 
 
@@ -88,8 +109,6 @@
 </head>
 
 <body>
-
-  <h1 id="title">Your Hylites</h1>
 
   <div id="hylites"></div>
 
