@@ -22,25 +22,60 @@ function formatDateTime(d) {
     minute = `0${minute}`;
   }
 
-  return `${month} ${date}, ${hour}:${minute} ${ampm}`;
+  return {
+    date: `${month} ${date}`,
+    time: `${hour}:${minute} ${ampm}`
+  }
 }
 
-$(document).ready(function() {
-  const hylites = JSON.parse(localStorage.hylites);
+function getHylites() {
+  return JSON.parse(localStorage.hylites);
+}
+
+function saveHylites(h) {
+  localStorage.hylites = JSON.stringify(h);
+}
+
+function populateHylites() {
+
+  $("#hylites").html("");
+
+  const hylites = getHylites();
   for (let i = 0; i < hylites.length; i++) {
     const date = formatDateTime(hylites[i].date);
 
-    const html = `<div class="hylite">
+    const html = `<div class="hylite" id="hylite-${i}">
                     <div class="quote">
                       <p>${hylites[i].quote}</p>
                     </div>
                     <div class="date">
-                      <p>${date}</p>
+                      <p>${date.date}</p>
+                      <p>${date.time}</p>
                     </div>
                     <div class="delete">
-                      <img src="delete.png" width="30" height="30">
+                      <i class="material-icons">close</i>
                     </div>
                   </div>`;
+
     $("#hylites").append(html);
   }
+
+  bindDeleter();
+}
+
+function bindDeleter() {
+  $(".delete").click(function() {
+    const parent = $(this).parents()[0];
+    const id = parent.id;
+    const num = id.substr(7);
+
+    let hylites = getHylites();
+    hylites.splice(num, 1);
+    saveHylites(hylites);
+    populateHylites();
+  });
+}
+
+$(document).ready(function() {
+  populateHylites();
 });
