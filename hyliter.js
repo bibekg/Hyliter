@@ -63,9 +63,7 @@ function populateHylites() {
 
       html += `<div class="hylite" id="hylite-${i}">
                       <div class="context container">
-                        <a title=" ${h.source_title}" href="${h.source_url}">
-                          ${h.source_icon_html}
-                        </a>
+                        ${h.context_html}
                       </div>
                       <div class="date container">
                         <p>${date.date}<br>${date.time}</p>
@@ -73,16 +71,25 @@ function populateHylites() {
                       <div class="quote container">
                         <p contentEditable>${h.selection}</p>
                       </div>
-                      <div class="delete container">
-                        <i class="material-icons">close</i>
+                      <div class="actions container">
+                        <div class="revert">
+                          <i title="Revert" class="material-icons">undo</i>
+                        </div>
+                        <div class="delete">
+                          <i title="Delete" class="material-icons">close</i>
+                        </div>
                       </div>
                     </div>`;
     }
   }
 
   $("#hylites").append(html);
+
+  // Bind handlers that have new targets as a
+  // result of hylite repopulation
   bindDeleteHandler();
   bindLinkHandler();
+  bindUndoHandler();
 }
 
 function bindDeleteHandler() {
@@ -90,14 +97,24 @@ function bindDeleteHandler() {
 
     // Get corresponding hylite index and remove
     // it from local storage
-    const hylite = $(this).parents(".hylite")[0];
-    const num = hylite.id.substr(7);
+    const id = $(this).parents(".hylite")[0].id.substr(7);
     let hylites = getHylites();
-    hylites.splice(num, 1);
+    hylites.splice(id, 1);
     saveHylites(hylites);
 
     populateHylites();
   });
+}
+
+function bindUndoHandler() {
+  $(".revert").click(function() {
+    const id = $(this).parents(".hylite")[0].id.substr(7);
+    let hylites = getHylites();
+    hylites[id].selection = hylites[id].originalSelection;
+    saveHylites(hylites);
+
+    populateHylites();
+  })
 }
 
 function bindLinkHandler() {
@@ -109,10 +126,9 @@ function bindLinkHandler() {
 function bindNewHyliteHandler() {
   $("#new-hylite").click(function() {
     addToStorage({
+      originalSelection: "New note",
       selection: "New note",
-      source_title: "Personal Note",
-      source_url: "#",
-      source_icon_html: `<i class="material-icons note-icon">person</i>`,
+      context_html: `<i class="material-icons note-icon">person</i>`,
       date: Date()
     });
 

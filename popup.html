@@ -41,8 +41,8 @@
     }
 
     #title {
-      margin-top: 15px;
-      margin-left: 15px;
+      margin-top: 40px;
+      margin-bottom: 40px;
       text-align: center;
     }
 
@@ -63,6 +63,7 @@
       margin-top: 15px;
       margin-left: 0px;
       margin-right: 0px;
+      border-bottom: 1px solid #222;
       /*border-radius: 3px;*/
     }
 
@@ -72,38 +73,29 @@
 
     .hylite .context {
       width: 5%;
-    }
-
-    .hylite .quote {
-      width: 70%;
+      cursor: default;
     }
 
     .hylite .date {
       width: 20%;
       text-align: center;
       line-height: 16px;
+      cursor: none;
     }
 
-    .hylite .helper {
-      display: inline-block;
-      vertical-align: middle;
-      height: 100%;
+    .hylite .quote {
+      width: 70%;
     }
 
-    .hylite .delete {
-      width: 5%;
-      vertical-align: middle;
-    }
-
-    .hylite .delete i {
-      vertical-align: middle;
-      text-align: center;
+    .hylite .actions i {
+      /*vertical-align: middle;*/
+      /*text-align: center;*/
       line-height: 50px;
       cursor: default;
       color: white;
     }
 
-    .hylite .delete i:hover {
+    .hylite .actions i:hover {
       color: #FC4A1A;
     }
 
@@ -116,11 +108,12 @@
       position: absolute;
       left: 15px;
       top: 15px;
+      font-size: 36px;
 
     }
 
     #new-hylite:hover {
-      color: #F7B733;
+      color: #000;
       cursor: default;
     }
 

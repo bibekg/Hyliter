@@ -5,10 +5,11 @@ chrome.contextMenus.create({
 
 chrome.contextMenus.onClicked.addListener( function(info, tab) {
   addToStorage({
+    originalSelection: info.selectionText,
     selection: info.selectionText,
-    source_title: tab.title,
-    source_url: tab.url,
-    source_icon_html: `<img src="${tab.favIconUrl}">`,
+    context_html: `<a title = "${tab.title}" href="${tab.url}">
+                    <img src="${tab.favIconUrl}">
+                  </a>`,
     date: Date()
   });
 })
