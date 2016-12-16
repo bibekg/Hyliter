@@ -8,7 +8,7 @@ chrome.contextMenus.onClicked.addListener( function(info, tab) {
     selection: info.selectionText,
     source_title: tab.title,
     source_url: tab.url,
-    source_icon_url: tab.favIconUrl,
+    source_icon_html: `<img src="${tab.favIconUrl}">`,
     date: Date()
   });
 })

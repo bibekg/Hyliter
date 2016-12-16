@@ -64,14 +64,14 @@ function populateHylites() {
       html += `<div class="hylite" id="hylite-${i}">
                       <div class="context container">
                         <a title=" ${h.source_title}" href="${h.source_url}">
-                          <img src="${h.source_icon_url}">
+                          ${h.source_icon_html}
                         </a>
                       </div>
                       <div class="date container">
                         <p>${date.date}<br>${date.time}</p>
                       </div>
                       <div class="quote container">
-                        <p>${h.selection}</p>
+                        <p contentEditable>${h.selection}</p>
                       </div>
                       <div class="delete container">
                         <i class="material-icons">close</i>
@@ -106,6 +106,46 @@ function bindLinkHandler() {
   });
 }
 
+function bindNewHyliteHandler() {
+  $("#new-hylite").click(function() {
+    addToStorage({
+      selection: "New note",
+      source_title: "Personal Note",
+      source_url: "#",
+      source_icon_html: `<i class="material-icons note-icon">person</i>`,
+      date: Date()
+    });
+
+    populateHylites();
+  });
+}
+
+function bindSaveChangesHandler() {
+  $(window).on("keyup", function() {
+    let hylites = getHylites();
+    let hs = $(".hylite .quote p");
+    for (let i = 0; i < hs.length; i++) {
+      hylites[i].selection = hs[i].innerHTML;
+    }
+    saveHylites(hylites);
+  });
+}
+
+function addToStorage(hylite) {
+  let hylites;
+  if (localStorage.hylites) {
+    hylites = JSON.parse(localStorage.hylites);
+  } else {
+    hylites = [];
+  }
+
+  hylites.push(hylite);
+  console.log(hylites);
+  localStorage.hylites = JSON.stringify(hylites);
+}
+
 $(document).ready(function() {
+  bindNewHyliteHandler();
+  bindSaveChangesHandler();
   populateHylites();
 });
