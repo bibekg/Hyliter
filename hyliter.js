@@ -82,6 +82,7 @@ function populateHylites() {
 
   $("#hylites").append(html);
   bindDeleteHandler();
+  bindLinkHandler();
 }
 
 function bindDeleteHandler() {
@@ -89,12 +90,19 @@ function bindDeleteHandler() {
 
     // Get corresponding hylite index and remove
     // it from local storage
-    const num = $(this).parents()[0].id.substr(7);
+    const hylite = $(this).parents(".hylite")[0];
+    const num = hylite.id.substr(7);
     let hylites = getHylites();
     hylites.splice(num, 1);
     saveHylites(hylites);
 
     populateHylites();
+  });
+}
+
+function bindLinkHandler() {
+  $(".context a").click(function() {
+    chrome.tabs.create({url: $(this).attr("href")})
   });
 }
 
