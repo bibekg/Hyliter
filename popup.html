@@ -1,124 +1,11 @@
 <head>
   <title>Your Hylites</title>
-  <script type="text/javascript" src= "jquery-3.1.1.min.js"></script>
-  <script type="text/javascript" src= "Hyliter.js"></script>
+  <script type="text/javascript" src= "js/jquery-3.1.1.min.js"></script>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-  <style>
-
-    * {
-      outline: none;
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    body {
-      width: 600px;
-      background-color: #4ABDAC;
-      padding: 0px;
-      margin: 0px;
-    }
-
-    h1, p {
-      font-family: 'Montserrat', sans-serif;
-      color: white;
-    }
-
-    .container {
-      display: -webkit-flexbox;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-flex-align: center;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #title {
-      margin-top: 40px;
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    #hylites {
-      width: 100%;
-    }
-
-    #hylites p {
-      font-size: 14px;
-    }
-
-    .hylite {
-      max-width: 100%;
-      padding: 15px;
-      background-color: #F7B733;
-      display: flex;
-      margin-bottom: 15px;
-      margin-top: 15px;
-      margin-left: 0px;
-      margin-right: 0px;
-      border-bottom: 1px solid #222;
-      /*border-radius: 3px;*/
-    }
-
-    .hylite div {
-      padding: 5px;
-    }
-
-    .hylite .context {
-      width: 5%;
-      cursor: default;
-    }
-
-    .hylite .date {
-      width: 20%;
-      text-align: center;
-      line-height: 16px;
-      cursor: none;
-    }
-
-    .hylite .quote {
-      width: 70%;
-    }
-
-    .hylite .actions i {
-      /*vertical-align: middle;*/
-      /*text-align: center;*/
-      line-height: 50px;
-      cursor: default;
-      color: white;
-    }
-
-    .hylite .actions i:hover {
-      color: #FC4A1A;
-    }
-
-    .note-icon {
-      color: white;
-    }
-
-    #new-hylite {
-      color: white;
-      position: absolute;
-      left: 15px;
-      top: 15px;
-      font-size: 36px;
-
-    }
-
-    #new-hylite:hover {
-      color: #000;
-      cursor: default;
-    }
-
-
-  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 
 </head>
 
@@ -127,5 +14,8 @@
   <i class="material-icons" id="new-hylite">add_circle</i>
 
   <div id="hylites"></div>
+
+  <script type="text/javascript" src= "js/hyliter.js"></script>
+  <script type="text/javascript" src="js/popup.js"></script>
 
 </body>

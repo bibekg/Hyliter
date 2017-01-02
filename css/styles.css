@@ -1,0 +1,107 @@
+* {
+  outline: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  width: 600px;
+  background-color: #4ABDAC;
+  padding: 0px;
+  margin: 0px;
+}
+
+h1, p {
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+}
+
+.container {
+  display: -webkit-flexbox;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  justify-content: center;
+}
+
+#title {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+#hylites {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+#hylites p {
+  font-size: 14px;
+}
+
+.hylite {
+  max-width: 100%;
+  padding: 15px;
+  background-color: #F7B733;
+  display: flex;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  margin-left: 0px;
+  margin-right: 0px;
+  border-bottom: 1px solid #222;
+  /*border-radius: 3px;*/
+}
+
+.hylite div {
+  padding: 5px;
+}
+
+.hylite .context {
+  width: 5%;
+  cursor: default;
+}
+
+.hylite .date {
+  width: 20%;
+  text-align: center;
+  line-height: 16px;
+  cursor: default;
+}
+
+.hylite .quote {
+  width: 70%;
+}
+
+.hylite .actions i {
+  line-height: 50px;
+  cursor: default;
+  color: white;
+}
+
+.hylite .actions i:hover {
+  color: #FC4A1A;
+}
+
+.note-icon {
+  color: white;
+}
+
+#new-hylite {
+  color: white;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 36px;
+
+}
+
+#new-hylite:hover {
+  color: #000;
+  cursor: default;
+}
