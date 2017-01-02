@@ -10,25 +10,10 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener( function(info, tab) {
   hyliter.init();
   hyliter.add({
-    id: hyliter.getNewId(),
-    originalSelection: info.selectionText,
     selection: info.selectionText,
-    context_html: `<a title = "${tab.title}" href="${tab.url}">
-                    <img src="${tab.favIconUrl}">
-                  </a>`,
-    date: Date()
+    type: "hylite",
+    sourceTitle: tab.title,
+    sourceUrl: tab.url,
+    sourceFaviconUrl: tab.favIconUrl
   });
 })
-//
-// function addToStorage(hylite) {
-//   let hylites;
-//   if (localStorage.hylites) {
-//     hylites = JSON.parse(localStorage.hylites);
-//   } else {
-//     hylites = [];
-//   }
-//
-//   hylites.push(hylite);
-//   console.log(hylites);
-//   localStorage.hylites = JSON.stringify(hylites);
-// }

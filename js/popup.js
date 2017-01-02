@@ -1,11 +1,4 @@
-$(document).ready(function() {
-    hyliter.init();
-    h = hyliter.hylites();
-
-    // Now populate DOM with h
-    console.log(h);
-    populateHylites(h, "#hylites");
-});
+// popup.js
 
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -38,39 +31,57 @@ function populateHylites(hylites, selector) {
 
   $(selector).html("");
 
-  var html = void 0;
+  var html;
   if (!hylites || hylites.length === 0) {
-    html = `<h1 id="${title}">
+    html = `<h1 id="title">
               You don't have any Hylites saved.<br>
               Select text, right-click, and Hylite.
             </h1>`;
   } else if (hylites) {
 
-    html = "<h1 id=\"title\">Your Hylites</h1>";
+    html = `<h1 id="title">Your Hylites</h1>`;
 
+    // Render each hylite to the DOM
     for (var i = 0; i < hylites.length; i++) {
       var h = hylites[i];
       var date = formatDateTime(h.date);
 
-      html += `<div class="${hylite}" id="${hylite}-${i}">
-                <div class=\"context container\">
-                    " + h.context_html + "
-                </div>
-                <div class=\"date container\">
-                  <p>" + date.date + "<br>" + date.time + "</p>
-                </div>
-                <div class=\"quote container\">
-                  <p contentEditable>" + h.selection + "</p>
-                </div>
-                <div class=\"actions container\">
-                  <div class=\"revert\">
-                    <i title=\"Revert\" class=\"material-icons\">undo</i>
+      html += `<div class="hylite" id="hylite-${h.id}">`;
+
+      // Context: dependent on note or hylite
+      html +=   `<div class="context container">`
+      switch (h.type) {
+        case 'note':
+          html += `<i class="material-icons note-icon">person</i>`;
+          break;
+        case 'hylite':
+          html += `<a title = "${h.sourceTitle}" href="${h.sourceUrl}">
+                    <img src="${h.sourceFaviconUrl}">
+                  </a>`
+      }
+      html +=   `</div>`
+
+      // Date
+      html +=   `<div class="date container">
+                  <p>${date.date}<br>${date.time}</p>
+                </div>`
+
+      // Main hylite content
+      html += `<div class="quote container">
+                  <p contentEditable>${h.selection}</p>
+                </div>`
+
+      // Actions
+      html += `<div class="actions container">
+                  <div class="revert">
+                    <i title="Revert" class="material-icons">undo</i>
                   </div>
-                  <div class=\"delete\">
-                    <i title=\"Delete\" class=\"material-icons\">close</i>
+                  <div class="delete">
+                    <i title="Delete" class="material-icons">close</i>
                   </div>
-                </div>
-              </div>`;
+                </div>`
+
+      html += `</div>`;
     }
   }
 
@@ -79,8 +90,8 @@ function populateHylites(hylites, selector) {
   // Bind handlers that have new targets as a
   // result of hylite repopulation
   bindDeleteHandler();
-  // bindLinkHandler();
-  // bindUndoHandler();
+  bindLinkHandler();
+  bindRestoreHandler();
 }
 
 function bindDeleteHandler() {
@@ -88,25 +99,17 @@ function bindDeleteHandler() {
 
     // Get corresponding hylite index and remove
     // it from local storage
-    var id = $(this).parents(".hylite")[0].id.substr(7);
-    hyliter.remove()
-
-    var hylites = downloadHylites();
-    hylites.splice(id, 1);
-    saveHylites(hylites);
-
-    populateHylites();
+    var id = parseInt($(this).parents(".hylite")[0].id.substr(7));
+    hyliter.remove(id);
+    populateHylites(hyliter.hylites(), "#hylites");
   });
 }
 
-function bindUndoHandler() {
+function bindRestoreHandler() {
   $(".revert").click(function () {
-    var id = $(this).parents(".hylite")[0].id.substr(7);
-    var hylites = downloadHylites();
-    hylites[id].selection = hylites[id].originalSelection;
-    saveHylites(hylites);
-
-    populateHylites();
+    var id = parseInt($(this).parents(".hylite")[0].id.substr(7));
+    hyliter.restore(id);
+    populateHylites(hyliter.hylites(), "#hylites");
   });
 }
 
@@ -118,22 +121,28 @@ function bindLinkHandler() {
 
 function bindNewHyliteHandler() {
   $("#new-hylite").click(function () {
-    addToStorage({
-      originalSelection: "New note",
-      selection: "New note",
-      context_html: "<i class=\"material-icons note-icon\">person</i>",
-      date: Date()
+    hyliter.add({
+      type: "note",
+      selection: "New note"
     });
+    populateHylites(hyliter.hylites(), "#hylites");
   });
 }
 
 function bindSaveChangesHandler() {
-  $(window).on("keyup", function () {
-    var hylites = downloadHylites();
-    var hs = $(".hylite .quote p");
-    for (var i = 0; i < hs.length; i++) {
-      hylites[i].selection = hs[i].innerHTML;
-    }
-    saveHylites(hylites);
+  $(window).keyup(function (e) {
+
+    const h = $(e.target).parents(".hylite")[0]
+
+    // Get ID of updated hylite
+    const id = parseInt(h.id.substr(7));
+    hyliter.update(id, e.target.innerHTML);
   });
 }
+
+$(document).ready(function() {
+    hyliter.init();
+    populateHylites(hyliter.hylites(), "#hylites");
+    bindSaveChangesHandler();
+    bindNewHyliteHandler();
+});

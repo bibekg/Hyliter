@@ -1,10 +1,28 @@
-"use strict";
+// hyliter.js
 
 var hyliter = function () {
 
   /* Private */
 
   var hylites;
+
+  /* Hylite object contains:
+      * id
+      * date
+      * originalSelection
+      * selection
+      * type: {note, hylite}
+
+   * If type: note
+      * display note-icon
+
+  * If type: hylite
+      * also contains:
+          * sourceUrl
+          * sourceTitle
+          * sourceFaviconUrl
+      * display context icon/link
+  */
 
   function downloadHylites() {
     var h = localStorage.hylites;
@@ -15,7 +33,7 @@ var hyliter = function () {
     }
   }
 
-  function saveHylites(hylites) {
+  function saveHylites() {
     localStorage.hylites = JSON.stringify(hylites);
   }
 
@@ -26,61 +44,59 @@ var hyliter = function () {
   }
 
   function getNewId() {
-    // Get the lowest number id that doesn't exist in hylite store
-    console.log(hylites);
-    let ids = hylites.map((x) => x.id);
-    // for (let i = 0; i < hylites.length; i++) {
-    //   let id = hylites[i].id;
-    //   ids.push(id);
-    // }
-
-    // Sort ids numerically
-    ids.sort( (a, b) => a - b );
+    let ids = hylites.map((x) => x.id).sort((a,b) => (a-b));
 
     // Search for smallest nonnegative id not already in use
     for (var i = 0; i < ids.length; i++) {
       if (ids[i] != i) { return i; }
     }
 
+    // All ID's linearly used
     return ids.length;
   }
 
   function addToStorage(hylite) {
-    var hylites = void 0;
-    if (localStorage.hylites) {
-      // Grab hylite store if it exists
-      hylites = JSON.parse(localStorage.hylites);
-    } else {
-      // Create hylite store if it doesn't exist
-      hylites = [];
-    }
+    hylite.id = getNewId();
+    hylite.date = Date();
+    hylite.originalSelection = hylite.selection;
 
     hylites.push(hylite);
-
-    // Save hylites to hylite store
-    localStorage.hylites = JSON.stringify(hylites);
+    saveHylites();
   }
 
   function removeFromStorage(id) {
     // Filter out the hylite with specified id
     hylites = hylites.filter(function(x) {
-      return (x !== id);
+      return (x.id !== id);
     });
+    saveHylites();
   }
 
   function getHylites() {
+    if (!hylites) { downloadHylites(); }
     return hylites;
+  }
+
+  // Restores hylite text to originally hylited text
+  function restoreHylite(id) {
+    const index = hylites.findIndex(x => (x.id === id));
+    hylites[index].selection = hylites[index].originalSelection;
+    saveHylites();
+  }
+
+  // Updates hylite store when DOM version of hylite is changed
+  function updateHylite(id, newText) {
+    const index = hylites.findIndex(x => (x.id === id));
+    hylites[index].selection = newText;
+    saveHylites();
   }
 
   return {
     init: init,
     add: addToStorage,
     remove: removeFromStorage,
-    hylites: getHylites,
-    getNewId: getNewId,
+    restore: restoreHylite,
+    update: updateHylite,
+    hylites: getHylites
   };
 }();
-
-$(document).ready(function () {
-  hyliter.init();
-});
