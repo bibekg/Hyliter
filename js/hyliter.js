@@ -6,33 +6,6 @@ var hyliter = function () {
 
   var hylites;
 
-  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  function formatDateTime(d) {
-    d = new Date(d);
-    var month = monthNames[d.getMonth()];
-    var date = d.getDate();
-
-    var hour = d.getHours();
-    var ampm = "am";
-    if (hour > 12) {
-      ampm = "pm";
-    }
-    hour %= 12;
-    if (hour === 0) {
-      hour = 12;
-    }
-    var minute = d.getMinutes();
-    if (minute >= 0 && minute < 10) {
-      minute = "0" + minute;
-    }
-
-    return {
-      date: month + " " + date,
-      time: hour + ":" + minute + " " + ampm
-    };
-  }
-
   function downloadHylites() {
     var h = localStorage.hylites;
     if (h) {
