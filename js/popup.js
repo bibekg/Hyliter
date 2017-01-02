@@ -29,6 +29,9 @@ function formatDateTime(d) {
 
 function populateHylites(hylites, selector) {
 
+  // Sort hylites in newest-first order
+  hylites.sort((a,b) => new Date(b.date) - new Date(a.date));
+
   $(selector).html("");
 
   var html;
@@ -67,19 +70,29 @@ function populateHylites(hylites, selector) {
                 </div>`
 
       // Main hylite content
-      html += `<div class="quote container">
-                  <p contentEditable>${h.selection}</p>
-                </div>`
+      html += `<div class="quote container">`
+
+      switch (h.type) {
+        case 'note':
+          html += `<textarea rows="5" placeholder="New note">${h.selection}</textarea>`;
+          break;
+        case 'hylite':
+          html += `<textarea rows="5" placeholder="Undo for original hylite">${h.selection}</textarea>`
+      }
+      html += `</div>`
 
       // Actions
-      html += `<div class="actions container">
-                  <div class="revert">
+      html += `<div class="actions container">`
+
+      if (h.type !== 'note') {
+        html +=  `<div class="revert">
                     <i title="Revert" class="material-icons">undo</i>
-                  </div>
-                  <div class="delete">
-                    <i title="Delete" class="material-icons">close</i>
-                  </div>
-                </div>`
+                  </div>`
+      }
+      html +=   `<div class="delete">
+                  <i title="Delete" class="material-icons">close</i>
+                </div>
+              </div>`
 
       html += `</div>`;
     }
@@ -97,8 +110,7 @@ function populateHylites(hylites, selector) {
 function bindDeleteHandler() {
   $(".delete i").click(function () {
 
-    // Get corresponding hylite index and remove
-    // it from local storage
+    // Get corresponding hylite index and remove it from local storage
     var id = parseInt($(this).parents(".hylite")[0].id.substr(7));
     hyliter.remove(id);
     populateHylites(hyliter.hylites(), "#hylites");
@@ -123,20 +135,17 @@ function bindNewHyliteHandler() {
   $("#new-hylite").click(function () {
     hyliter.add({
       type: "note",
-      selection: "New note"
+      selection: ""
     });
     populateHylites(hyliter.hylites(), "#hylites");
   });
 }
 
 function bindSaveChangesHandler() {
-  $(window).keyup(function (e) {
-
-    const h = $(e.target).parents(".hylite")[0]
-
-    // Get ID of updated hylite
+  $("textarea").keyup(function () {
+    const h = $(this).parents(".hylite")[0];
     const id = parseInt(h.id.substr(7));
-    hyliter.update(id, e.target.innerHTML);
+    hyliter.update(id, $(this).val());
   });
 }
 

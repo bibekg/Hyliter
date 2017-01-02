@@ -4,12 +4,19 @@
   "description": "Saves selected bits of text from your browsing.",
   "version": "0.1",
   "permissions": ["contextMenus"],
+  "web_accessible_resources": ["fonts/*.woff2"],
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/content.css"],
+      "js": ["js/jquery-3.1.1.min.js", "js/content.js"]
+    }
+  ],
   "browser_action": {
     "default_title": "View Hylites",
     "default_popup": "popup.html",

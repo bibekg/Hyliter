@@ -88,6 +88,7 @@ var hyliter = function () {
   function updateHylite(id, newText) {
     const index = hylites.findIndex(x => (x.id === id));
     hylites[index].selection = newText;
+    hylites[index].date = Date();
     saveHylites();
   }
 
